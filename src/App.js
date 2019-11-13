@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import uuidv4 from 'uuid/v4'
 import './App.css'
-// import TodoList from './components/todolist'
+import { id } from 'postcss-selector-parser'
 
 const App = () => {
   const [todo, setTodo] = useState('')
@@ -14,11 +14,18 @@ const App = () => {
     setTodoList([...todoList, { todo, done, id: uuidv4() }])
     setTodo('')
   }
+
+  const markTodo = (itemTodo, index) => {
+    // const obj = todoList.find((item) => item.id === itemTodo.id)
+    todoList[index].done = !todoList[index].done
+
+    setTodoList([...todoList])
+  }
+
   return (
 
     <div>
-      {console.log(todoList)}
-      <h1>Todo List</h1>
+      <h1>V1</h1>
       <form onSubmit={handleAddTodo}>
         <input
           type='text'
@@ -27,12 +34,21 @@ const App = () => {
           onChange={e => setTodo(e.target.value)}
         />
         <button>Add </button>
+        <br />
+        <label htmlFor='Done' style={{ cursor: 'pointer' }}>
+          <input type='checkbox' onChange={e => setDone(e.target.checked)} id='Done' />
+          Done
+        </label>
       </form>
 
       <ul>
         {
-          todoList.map(e => (
-            <li key={e.id}>{e.todo}</li>
+          todoList.map((e, i) => (
+            <li key={e.id}>
+              <a href='#' onClick={() => markTodo(e, i)}>
+                {!e.done ? <span>{e.todo}</span> : <strike>{e.todo}</strike>}
+              </a> <span>x</span>
+            </li>
           ))
         }
       </ul>
